@@ -1,0 +1,25 @@
+{
+  "name": "computed-dom-forensics",
+  "version": "1.0.0",
+  "description": "Agent skill for deterministic CSS/DOM layout debugging using computed geometry and hit-testing.",
+  "type": "module",
+  "bin": {
+    "dom-forensics": "./skills/computed-dom-forensics/scripts/dom-forensics.mjs"
+  },
+  "scripts": {
+    "test:forensics": "node ./skills/computed-dom-forensics/scripts/dom-forensics.mjs"
+  },
+  "keywords": [
+    "agent-skills",
+    "claude-code",
+    "cursor",
+    "debugging",
+    "css",
+    "playwright",
+    "dom-forensics"
+  ],
+  "dependencies": {
+    "playwright": "^1.50.0"
+  },
+  "license": "MIT"
+}
