@@ -1,0 +1,8 @@
+{
+  "name": "computed-dom-forensics",
+  "description": "Eliminates blind CSS/Tailwind guessing by extracting live browser geometry, stacking contexts, overflow culprits, and pointer hit-tests via Playwright.",
+  "version": "1.0.0",
+  "author": {
+    "name": "turtrsst"
+  }
+}
