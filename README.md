@@ -1,48 +1,48 @@
 # 🔬 computed-dom-forensics
 
-**Stop your AI coding agent from blindly guessing CSS and Tailwind classes.**
+**Hentikan agen AI coding Anda menebak-nebak class CSS dan Tailwind secara membabi buta.**
 
-[![Agent Skills Compatible](https://img.shields.io/badge/npx_skills-compatible-black?style=flat-square)](https://skills.sh)
-[![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-Plugin-d97757?style=flat-square)](https://docs.anthropic.com)
-[![Zero Extra Dependencies](https://img.shields.io/badge/dependencies-playwright_only-2ea44f?style=flat-square)](#)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Kompatibel npx skills](https://img.shields.io/badge/npx_skills-kompatibel-black?style=flat-square)](https://skills.sh)
+[![Plugin Claude Code](https://img.shields.io/badge/Claude_Code-Plugin-d97757?style=flat-square)](https://docs.anthropic.com)
+[![Tanpa Dependensi Tambahan](https://img.shields.io/badge/dependensi-hanya_playwright-2ea44f?style=flat-square)](#)
+[![Lisensi: MIT](https://img.shields.io/badge/Lisensi-MIT-blue.svg?style=flat-square)](LICENSE)
 
-`computed-dom-forensics` is an agentic skill and ultra-lightweight Playwright CLI telemetry engine for **Claude Code**, **Cursor**, **Windsurf**, **OpenCode**, and **Codex CLI**.
+`computed-dom-forensics` adalah sebuah *agentic skill* sekaligus mesin telemetri CLI Playwright yang super ringan untuk **Claude Code**, **Cursor**, **Windsurf**, **OpenCode**, dan **Codex CLI**.
 
-When you ask an LLM to fix a broken mobile layout, an unclickable button, or a `z-index` bug, it usually guesses from static code—slapping `overflow-x-hidden` on `<body>` or `z-[9999]` on a component without knowing the actual runtime geometry. **`computed-dom-forensics` enforces an Iron Law:** the agent must capture real browser coordinates, stacking contexts, pointer hit-tests, and annotated HUD screenshots *before* touching a single line of CSS.
+Ketika Anda meminta LLM memperbaiki layout mobile yang rusak, tombol yang tidak bisa diklik, atau bug `z-index`, biasanya ia menebak dari kode statis—misalnya langsung menambahkan `overflow-x-hidden` pada `<body>` atau `z-[9999]` pada sebuah komponen tanpa mengetahui geometri runtime yang sebenarnya. **`computed-dom-forensics` menegakkan Hukum Besi:** agen wajib menangkap koordinat browser nyata, stacking context, hit-test pointer, dan screenshot HUD beranotasi *sebelum* menyentuh satu baris pun kode CSS.
 
 ---
 
-## ⚡ Why Agents Need This
+## ⚡ Mengapa Agen Membutuhkan Ini
 
-| Common Frontend Bug | Typical Blind AI Behavior ❌ | With `computed-dom-forensics` ✅ |
+| Bug Frontend Umum | Perilaku AI Tanpa Alat Ini ❌ | Dengan `computed-dom-forensics` ✅ |
 | :--- | :--- | :--- |
-| **Unclickable button / Modal overlap** | Randomly bumps `z-50` to `z-[9999]` or removes `relative`. | Runs center-point `elementFromPoint(cx, cy)` hit-test and walks the DOM ancestry to find the exact parent creating a `transform` / `opacity` stacking context trap. |
-| **Unwanted horizontal scroll on mobile** | Hides the symptom by adding `overflow-x-hidden` to `body`. | Scans all DOM nodes, ranks the top `overflowCulprits` where `rect.right > viewport.width`, and pinpoints the exact child overflowing by `+XXpx`. |
-| **Sticky element not sticking** | Rewrites `sticky top-0` to `fixed` and breaks layout flow. | Walks the `ancestryChain` up to `<html>` to detect which parent container has a conflicting `overflow: hidden/auto` or constrained height. |
-| **Collateral visual regressions** | Fixes one button but shifts the entire page layout without noticing. | Captures a clean **Baseline (`baseline.png`)** and generates an in-browser HTML5 Canvas **Visual Diff (`diff.png`)** highlighting changed pixels in Magenta (`#ff00ff`). |
+| **Tombol tidak bisa diklik / Modal tumpang tindih** | Acak menaikkan `z-50` menjadi `z-[9999]` atau menghapus `relative`. | Menjalankan hit-test titik tengah `elementFromPoint(cx, cy)` dan menelusuri ancestry DOM untuk menemukan parent yang membuat jebakan stacking context `transform` / `opacity`. |
+| **Scroll horizontal yang tidak diinginkan di mobile** | Menyembunyikan gejala dengan menambahkan `overflow-x-hidden` pada `body`. | Memindai semua node DOM, mengurutkan `overflowCulprits` teratas di mana `rect.right > viewport.width`, dan menunjukkan dengan tepat anak mana yang meluber `+XXpx`. |
+| **Elemen sticky tidak menempel** | Mengubah `sticky top-0` menjadi `fixed` dan merusak alur layout. | Menelusuri `ancestryChain` hingga `<html>` untuk mendeteksi parent mana yang memiliki `overflow: hidden/auto` yang konflik atau tinggi yang dibatasi. |
+| **Regresi visual collateral** | Memperbaiki satu tombol tapi menggeser seluruh layout halaman tanpa sadar. | Menangkap **Baseline** yang bersih (`baseline.png`) dan menghasilkan **Visual Diff** (`diff.png`) berbasis HTML5 Canvas di dalam browser yang menandai piksel berubah dengan warna Magenta (`#ff00ff`). |
 
 ---
 
-## 📦 Installation
+## 📦 Instalasi
 
-### Option 1: Install via `npx skills` (Recommended for Cursor, Claude Code, OpenCode, Windsurf)
+### Opsi 1: Instal via `npx skills` (Direkomendasikan untuk Cursor, Claude Code, OpenCode, Windsurf)
 
-Install directly into your project or global agent skills directory using the standard skills CLI:
+Instal langsung ke direktori skill proyek atau global agen Anda menggunakan skills CLI standar:
 
 ```bash
 npx skills add <your-github-username>/computed-dom-forensics
 ```
 
-### Option 2: Install as a Claude Code Plugin
+### Opsi 2: Instal sebagai Plugin Claude Code
 
-Inside a Claude Code session, register and install the plugin directly:
+Di dalam sesi Claude Code, daftarkan dan instal plugin langsung:
 
 ```bash
 /plugin install github:<your-github-username>/computed-dom-forensics
 ```
 
-### Option 3: Manual Clone & Local Setup
+### Opsi 3: Clone Manual & Setup Lokal
 
 ```bash
 git clone https://github.com/<your-github-username>/computed-dom-forensics.git
@@ -51,77 +51,77 @@ npm install
 npx playwright install chromium
 ```
 
-> **Note:** Make sure `.forensics/` is added to your project's `.gitignore` so temporary screenshots and visual diffs are not committed:
+> **Catatan:** Pastikan `.forensics/` sudah ada di `.gitignore` proyek Anda agar screenshot sementara dan visual diff tidak ikut ter-commit:
 > ```bash
 > echo ".forensics/" >> .gitignore
 > ```
 
 ---
 
-## 🖼️ Multimodal HUD & Visual Diff Architecture
+## 🖼️ Arsitektur Multimodal HUD & Visual Diff
 
-Unlike heavy visual testing suites that require native C++ binaries or external image processing libraries (`sharp`, `pixelmatch`, `pngjs`), `computed-dom-forensics` runs **100% inside Playwright's Chromium engine**:
+Tidak seperti suite visual testing berat yang memerlukan binary C++ native atau library pemroses gambar eksternal (`sharp`, `pixelmatch`, `pngjs`), `computed-dom-forensics` berjalan **100% di dalam engine Chromium bawaan Playwright**:
 
 1. **Annotated Forensic HUD (`.forensics/annotated.png`):**
-   Injects a zero-interference fixed overlay (`#__dom_forensics_hud__`) right before taking a screenshot so multimodal models (Claude, GPT-4o, Gemini) can literally *see* the geometry:
-   * 🟥 **Red Box (`OVERFLOW #n`):** Elements spilling past the right or left edge of the viewport, labeled with exact `+XXpx` overflow.
-   * 🟦 **Cyan Box (`TARGET`):** The target element inspected via `--selector`, labeled with its computed `WxH` dimensions.
-   * 🟧 **Orange Box (`OCCLUDER`) + Red Target Dot:** If the target is covered by another layer (`isOccluded: true`), highlights the exact blocking DOM node and marks the blocked click coordinate `(cx, cy)`.
+   Menyuntikkan overlay fixed tanpa gangguan (`#__dom_forensics_hud__`) tepat sebelum mengambil screenshot agar model multimodal (Claude, GPT-4o, Gemini) benar-benar bisa *melihat* geometrinya:
+   * 🟥 **Kotak Merah (`OVERFLOW #n`):** Elemen yang meluber melewati tepi kanan atau kiri viewport, diberi label `+XXpx` yang presisi.
+   * 🟦 **Kotak Sian (`TARGET`):** Elemen target yang diperiksa via `--selector`, diberi label dimensi `WxH` hasil komputasi.
+   * 🟧 **Kotak Oranye (`OCCLUDER`) + Titik Merah:** Jika target tertutup lapisan lain (`isOccluded: true`), menandai node DOM penghalang yang persis dan koordinat klik yang terblokir `(cx, cy)`.
 
-2. **Zero-Dependency Canvas Diff (`.forensics/diff.png`):**
-   Compares `.forensics/baseline.png` (captured before edits) against the current state after CSS fixes. Unchanged pixels are dimmed into subtle grayscale, while modified pixels light up in **Vivid Magenta (`#ff00ff`)** inside a **Cyan Bounding Box**—giving the agent instant proof that its fix was surgical.
-
----
-
-## 🚀 Usage Guide: Claude Code & Cursor
-
-Once installed, the skill activates automatically whenever you describe a layout, overflow, alignment, or clickability bug.
-
-### Using in Claude Code
-
-1. Make sure your local dev server is running (e.g., `npm run dev` on `http://localhost:3000`).
-2. Prompt Claude Code naturally:
-   > *"On mobile viewport (375x812), the `/checkout` page scrolls horizontally and the `.pay-now-btn` cannot be clicked. Use `computed-dom-forensics` to diagnose and fix it."*
-3. **What Claude Code will do automatically:**
-   * Execute `dom-forensics.mjs` with `--viewport 375x812 --selector ".pay-now-btn" --annotate .forensics/annotated-before.png --baseline .forensics/baseline.png`.
-   * Use its built-in **`Read` tool** to visually inspect `.forensics/annotated-before.png` alongside the JSON telemetry.
-   * Report the mathematical root cause (e.g., *"`.promo-banner` overflows the 375px viewport by +42px, and `.pay-now-btn` at (187, 760) is occluded by `.cookie-backdrop`"*).
-   * Apply the minimal CSS/Tailwind fix.
-   * Re-run `dom-forensics.mjs` with `--diff .forensics/diff.png` and read the diff image to verify zero collateral layout damage.
-
-### Using in Cursor (Agent Mode)
-
-1. If you installed via `npx skills add`, Cursor will load `SKILL.md` automatically. (Alternatively, symlink or copy `skills/computed-dom-forensics/SKILL.md` into `.cursor/rules/computed-dom-forensics.mdc`).
-2. In **Cursor Composer / Agent Mode**, attach or mention the localhost URL and bug description:
-   > *"The sticky sidebar on `http://localhost:3000/docs` stops sticking when scrolling down, and the code table breaks out of the flex container on 768x1024."*
-3. Cursor's Agent will run the terminal command, inspect both the JSON output and `.forensics/annotated-before.png`, and fix the exact parent container causing the flex shrinkage or overflow trap.
+2. **Canvas Diff Tanpa Dependensi (`.forensics/diff.png`):**
+   Membandingkan `.forensics/baseline.png` (ditangkap sebelum diedit) dengan kondisi saat ini setelah perbaikan CSS. Piksel yang tidak berubah diredupkan menjadi grayscale halus, sementara piksel yang berubah menyala dalam **Magenta Pekat (`#ff00ff`)** di dalam **Kotak Pembatas Sian**—memberi agen bukti instan bahwa perbaikannya genuglakear (surgical).
 
 ---
 
-## 🛠️ Standalone CLI Reference
+## 🚀 Panduan Penggunaan: Claude Code & Cursor
 
-You (or your agent) can also run the forensic script directly from any terminal:
+Setelah terinstal, skill ini aktif secara otomatis setiap kali Anda menjelaskan bug layout, overflow, perataan (alignment), atau klikabilitas.
+
+### Menggunakan di Claude Code
+
+1. Pastikan dev server lokal Anda berjalan (mis. `npm run dev` di `http://localhost:3000`).
+2. Beri prompt ke Claude Code secara natural:
+   > *"Pada viewport mobile (375x812), halaman `/checkout` scroll ke samping dan `.pay-now-btn` tidak bisa diklik. Gunakan `computed-dom-forensics` untuk mendiagnosis dan memperbaikinya."*
+3. **Yang akan dilakukan Claude Code secara otomatis:**
+   * Menjalankan `dom-forensics.mjs` dengan `--viewport 375x812 --selector ".pay-now-btn" --annotate .forensics/annotated-before.png --baseline .forensics/baseline.png`.
+   * Menggunakan tool **`Read`** bawaan untuk memeriksa visual `.forensics/annotated-before.png` bersamaan dengan telemetri JSON.
+   * Melaporkan akar masalah matematis (mis. *"`.promo-banner` meluber dari viewport 375px sebesar +42px, dan `.pay-now-btn` di (187, 760) tertutup oleh `.cookie-backdrop`"*).
+   * Menerapkan perbaikan CSS/Tailwind seminimal mungkin.
+   * Menjalankan ulang `dom-forensics.mjs` dengan `--diff .forensics/diff.png` dan membaca gambar diff untuk memverifikasi tidak ada kerusakan layout collateral.
+
+### Menggunakan di Cursor (Agent Mode)
+
+1. Jika diinstal via `npx skills add`, Cursor akan memuat `SKILL.md` secara otomatis. (Alternatifnya, symlink atau salin `skills/computed-dom-forensics/SKILL.md` ke `.cursor/rules/computed-dom-forensics.mdc`).
+2. Di **Cursor Composer / Agent Mode**, sebutkan URL localhost dan deskripsi bug:
+   > *"Sidebar sticky di `http://localhost:3000/docs` berhenti menempel saat di-scroll ke bawah, dan tabel kode keluar dari container flex pada 768x1024."*
+3. Agen Cursor akan menjalankan perintah terminal, memeriksa output JSON dan `.forensics/annotated-before.png`, lalu memperbaiki parent container yang menyebabkan flex shrinkage atau jebakan overflow.
+
+---
+
+## 🛠️ Referensi CLI Standalone
+
+Anda (atau agen Anda) juga bisa menjalankan skrip forensik langsung dari terminal mana pun:
 
 ```bash
-node skills/computed-dom-forensics/scripts/dom-forensics.mjs [options]
+node skills/computed-dom-forensics/scripts/dom-forensics.mjs [opsi]
 ```
 
-### CLI Options
+### Opsi CLI
 
-| Flag | Short | Default | Description |
+| Flag | Singkat | Default | Deskripsi |
 | :--- | :---: | :---: | :--- |
-| `--url <url>` | `-u` | *(Required)* | Full URL of the running web page (e.g., `http://localhost:3000`). |
-| `--selector <css>` | `-s` | `undefined` | Target CSS selector for deep inspection, hit-testing, and ancestry walk. |
-| `--viewport <WxH>` | `-v` | `1280x800` | Viewport dimensions in pixels (e.g., `375x812` for iPhone, `1440x900` for Desktop). |
-| `--wait <ms>` | `-w` | `500` | Extra wait time in milliseconds after load for animations/hydration to settle. |
-| `--annotate <path>` | `-a` | `undefined` | Output path for the HUD-annotated screenshot (e.g., `.forensics/annotated.png`). |
-| `--baseline <path>` | `-b` | `undefined` | Path to save (if missing) or compare against a clean baseline screenshot. |
-| `--diff <path>` | `-d` | `undefined` | Output path for the Magenta pixel-diff image when `--baseline` already exists. |
-| `--fullPage` | — | `false` | Capture full scrollable page height in screenshots instead of just the viewport. |
+| `--url <url>` | `-u` | *(Wajib)* | URL lengkap halaman web yang berjalan (mis. `http://localhost:3000`). |
+| `--selector <css>` | `-s` | `undefined` | Selector CSS target untuk inspeksi mendalam, hit-test, dan penelusuran ancestry. |
+| `--viewport <WxH>` | `-v` | `1280x800` | Dimensi viewport dalam piksel (mis. `375x812` untuk iPhone, `1440x900` untuk Desktop). |
+| `--wait <ms>` | `-w` | `500` | Waktu tunggu tambahan dalam milidetik setelah load agar animasi/hydration stabil. |
+| `--annotate <path>` | `-a` | `undefined` | Path output untuk screenshot beranotasi HUD (mis. `.forensics/annotated.png`). |
+| `--baseline <path>` | `-b` | `undefined` | Path untuk menyimpan (jika belum ada) atau membandingkan dengan screenshot baseline yang bersih. |
+| `--diff <path>` | `-d` | `undefined` | Path output gambar pixel-diff Magenta saat `--baseline` sudah ada. |
+| `--fullPage` | — | `false` | Menangkap seluruh tinggi halaman yang bisa di-scroll, bukan hanya viewport. |
 
-### Example Workflow Commands
+### Contoh Perintah Alur Kerja
 
-**1. Before Fix (Capture Telemetry + Baseline + Annotated HUD):**
+**1. Sebelum Perbaikan (Tangkap Telemetri + Baseline + HUD Beranotasi):**
 ```bash
 node skills/computed-dom-forensics/scripts/dom-forensics.mjs \
   --url "http://localhost:3000/pricing" \
@@ -131,7 +131,7 @@ node skills/computed-dom-forensics/scripts/dom-forensics.mjs \
   --baseline ".forensics/baseline.png"
 ```
 
-**2. After Fix (Verify Geometry + Generate Visual Diff):**
+**2. Setelah Perbaikan (Verifikasi Geometri + Buat Visual Diff):**
 ```bash
 node skills/computed-dom-forensics/scripts/dom-forensics.mjs \
   --url "http://localhost:3000/pricing" \
@@ -144,9 +144,9 @@ node skills/computed-dom-forensics/scripts/dom-forensics.mjs \
 
 ---
 
-## 📊 Sample JSON Telemetry Output
+## 📊 Contoh Output Telemetri JSON
 
-The CLI outputs token-compact JSON tailored for LLM context windows:
+CLI menghasilkan JSON yang ringkas token, dirancang khusus untuk context window LLM:
 
 ```json
 {
@@ -227,8 +227,8 @@ The CLI outputs token-compact JSON tailored for LLM context windows:
 
 ---
 
-## 🤝 Contributing & License
+## 🤝 Kontribusi & Lisensi
 
-PRs for additional layout heuristics (such as CSS Grid track blowout detection or sub-pixel font clipping) are welcome!
+PR untuk heuristik layout tambahan (misalnya deteksi blowout track CSS Grid atau clipping font sub-piksel) sangat diterima!
 
-Licensed under the **MIT License**.
+Berlisensi **MIT**.
